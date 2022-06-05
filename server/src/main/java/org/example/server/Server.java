@@ -16,6 +16,8 @@ import java.time.temporal.ChronoUnit;
 
 public class Server {
     public static final byte[] CRLFCRLF = {'\r', '\n', '\r', '\n'};
+    public static final byte[] CRLF= {'\r', '\n'};
+
     private int portNumber = 9999;
     private int readTimeout = 60;
     private int buferSize = 4096;
@@ -64,7 +66,7 @@ public class Server {
             System.out.println(socket.getInetAddress());
             System.out.println("Enter command");
 
-            final String message = readMessage(input);
+            final Request request = readRequest(input);
             final String response =
                     "HTTP/1.1 200 OK\r\n" +
                             "Connection: close\r\n" +
@@ -79,7 +81,7 @@ public class Server {
         }
     }
 
-    private String readMessage(InputStream input) throws IOException {
+    private Request readRequest(InputStream input) throws IOException {
         final byte[] buffer = new byte[buferSize];
         int offset = 0;
         int lenght = buffer.length;
@@ -106,6 +108,25 @@ public class Server {
                 throw new BadRequestException("Not found");
             }
         }
-        return new String(buffer, 0, buffer.length, StandardCharsets.UTF_8).trim();
+
+        final Request request = new Request();
+        final int requestLineEndIndex = Bytes.indexOf(buffer,CRLF);
+        if(requestLineEndIndex == -1 )
+        {
+            throw new BadRequestException("Request Line not found");
+        }
+        String requestLine = new String(buffer,0,requestLineEndIndex,StandardCharsets.UTF_8);
+        System.out.println("requestline = " + requestLine);
+        parseRequestLine(requestLine);
+        return request;
+    }
+
+    private String[] parseRequestLine(final String requestLine) {
+        final String[] parts = requestLine.split(" ");
+        System.out.println("Тип: " + parts[0]);
+        System.out.println("Метод: " + parts[1]);
+        System.out.println("Версия протокола: " + parts[2]);
+
+        return parts;
     }
 }
