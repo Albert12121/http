@@ -1,3 +1,5 @@
+package org.example.server.exception;
+
 public class DeadLineExceedException extends RuntimeException {
 
     public DeadLineExceedException() {

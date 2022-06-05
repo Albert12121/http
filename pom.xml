@@ -6,24 +6,32 @@
 
     <groupId>org.example</groupId>
     <artifactId>http</artifactId>
+    <packaging>pom</packaging>
     <version>1.0</version>
+    <modules>
+        <module>app</module>
+        <module>server</module>
+    </modules>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
+        <maven-assembly-plugin.version>3.3.0</maven-assembly-plugin.version>
+        <guava.version>31.1-jre</guava.version>
+        <lombok.version>1.18.24</lombok.version>
     </properties>
     <dependencies>
         <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>31.1-jre</version>
+            <version>${guava.version}</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.24</version>
+            <version>${lombok.version}</version>
             <scope>provided</scope>
         </dependency>
 
